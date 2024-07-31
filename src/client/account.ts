@@ -11,7 +11,6 @@ export class Account {
 
     /**
      * Get a list of accounts owned by the user. Usually, MercadoBitcoin works with only one default account.
-     * 
      */
     public async listAccounts(): Promise<MbAccount[]> {
         const headers = this.buildHeaders();

@@ -1,3 +1,3 @@
-export class ClientConfiguration {
+export type ClientConfiguration = {
     
 }
