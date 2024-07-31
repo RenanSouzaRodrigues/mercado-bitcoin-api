@@ -2,8 +2,14 @@
   "name": "mercado-bitcoin-api",
   "version": "1.0.0",
   "description": "This package aims to facilitate integration with the Mercado Bitcoin API, in an easy way and properly separating all the responsibilities of the API.",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "repository": "https://github.com/RenanSouzaRodrigues/mercado-bitcoin-api.git",
   "author": "Renan Souza <renan.souza@powerpush.com.br>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "tsup": "^8.2.3",
+    "typescript": "^5.5.4"
+  }
 }
