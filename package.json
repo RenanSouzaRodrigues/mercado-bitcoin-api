@@ -8,8 +8,14 @@
   "repository": "https://github.com/RenanSouzaRodrigues/mercado-bitcoin-api.git",
   "author": "Renan Souza <renan.souza@powerpush.com.br>",
   "license": "MIT",
+  "scripts": {
+    "build": "tsup"
+  },
   "devDependencies": {
     "tsup": "^8.2.3",
     "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
   }
 }
