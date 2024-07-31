@@ -64,6 +64,8 @@ export class PublicData {
         payload.exchange_listed = response.data["exchange-listed"];
         payload.exchange_traded = response.data["exchange-traded"];
         payload.session_regular = response.data["session-regular"];
+        payload.withdraw_minimum = response.data["withdraw-minimum"];
+        payload.withdrawal_fee = response.data["withdrawal_fee"];
         return payload;
     }
 
