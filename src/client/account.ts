@@ -1,4 +1,4 @@
-import fetch, { HeadersInit, RequestInfo } from "node-fetch";
+import axios from "axios";
 
 export class Account { 
     private bearerToken: string;
@@ -6,39 +6,14 @@ export class Account {
 
     constructor(bearerToken: string, url: string) {
         this.bearerToken = bearerToken;
-        this.baseMbUrl = url;
+        this.baseMbUrl = url + "/accounts";
     }
 
-    /**
-     * Get a list of accounts owned by the user. Usually, MercadoBitcoin works with only one default account.
-     */
-    public async listAccounts(): Promise<MbAccount[]> {
-        const headers = this.buildHeaders();
-        const url = `${this.baseMbUrl}/accounts`;
-        const response = await fetch(url, { method: "get", headers });
-        if (response.status != 200) throw new Error("Invalid request to account list");
-        const json = await response.json();
-        return JSON.parse(<string> json);
-    }
-
-    /**
-     * Get balances for all markets, including fiat, for an account
-     * Has a rate limit of 3 requests per second
-     */
-    public async listBalances(): Promise<any> {
-
-    }
-
-    public async getTier(): Promise<any> {
-
-    }
-
-    public async listPositions(): Promise<any> {
-
-    }
-
-    private buildHeaders(): { 'Content-Type' : string, 'Authorization': string } {
-        return { 'Content-Type': 'application/json', 'Authorization': this.bearerToken };
+    private buildHeaders() {
+        return {
+            "Content-Type": "application/json",
+            "Authorization": this.bearerToken,
+        }
     }
 }
 
