@@ -70,6 +70,7 @@ export class PublicData {
     /**
      * Get current prices of the instrument.
      * Has a request limit of 1 request per second
+     * @param params The required param to send to the api
      */
     public async listTickers(params: {symbols: string}): Promise<MbCandle> {
         const url = `${this.baseUrl}/tickers`;
