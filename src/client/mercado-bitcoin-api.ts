@@ -10,8 +10,8 @@ export class MercadoBitcoinApi {
     public trading!: Trading;
 
     private clientConfig: ClientConfiguration;
-    private baseUrl: string;
-    private bearerToken: string = "";
+    private baseUrl!: string;
+    private bearerToken!: string;
     
     constructor(clientConfig: ClientConfiguration) {
         this.clientConfig = clientConfig;

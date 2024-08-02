@@ -5,7 +5,7 @@ export class Account {
     private baseUrl: string;
 
     constructor(bearerToken: string, url: string) {
-        this.bearerToken = bearerToken;
+        this.bearerToken = `Bearer ${bearerToken}`;
         this.baseUrl = url + "/accounts";
     }
 
