@@ -33,8 +33,17 @@ export class Trading {
         return <MbTradingOrder[]> response.data;
     }
 
-    public async placeOrder(accountId: string, tradeOrder: any): Promise<any> {
-
+    /**
+     * Place a new order.
+     * @param accountId Account identifier. Obtained from List Accounts
+     * @param symbol Instrument symbol in the form BASE-QUOTE(e.g. BTC-BRL)
+     * @param payload The request payload
+     */
+    public async placeOrder(accountId: string, symbol: string, payload: MbPlaceOrderPayload): Promise<MbPlaceOrderResponse> {
+        const url = `${this.baseUrl}/${accountId}/${symbol}/orders`
+        const headers = this.buildHeaders();
+        const response = await axios.post(url, payload, {headers});
+        return <MbPlaceOrderResponse> response.data;
     } 
 
     public async cancelOrder(): Promise<any> {
@@ -90,4 +99,19 @@ export type MbTradingOrder = {
     triggerOrderId: number;
     type: string;
     updated_at: number;
+}
+
+export type MbPlaceOrderPayload = {
+    async: boolean,
+    cost: number,
+    externalId: number,
+    limitPrice: number,
+    qty: number,
+    side: "buy" | "sell",
+    stopPrice: number,
+    type: "market" | "limit" | "stoplimit" | "post-only"
+}
+
+export type MbPlaceOrderResponse = {
+    orderId: string;
 }
