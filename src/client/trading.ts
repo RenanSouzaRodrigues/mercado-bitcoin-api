@@ -13,7 +13,7 @@ export class Trading {
      * @param symbol Instrument symbol in the form BASE-QUOTE(e.g. BTC-BRL)
      */
     public async listOrders(accountId: string, symbol: string): Promise<any> {
-
+        
     }
 
     public async placeOrder(accountId: string, tradeOrder: any): Promise<any> {
