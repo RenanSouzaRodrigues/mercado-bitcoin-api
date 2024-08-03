@@ -35,6 +35,7 @@ export class Trading {
 
     /**
      * Place a new order.
+     * Has a rate limit of 3 requests per second
      * @param accountId Account identifier. Obtained from List Accounts
      * @param symbol Instrument symbol in the form BASE-QUOTE(e.g. BTC-BRL)
      * @param payload The request payload
@@ -46,8 +47,11 @@ export class Trading {
         return <MbPlaceOrderResponse> response.data;
     } 
 
-    public async cancelOrder(): Promise<any> {
-
+    public async cancelOrder(accountId: string, symbol: string, orderId: string): Promise<MbCancelOrderResponse> {
+        const url = `${this.baseUrl}/${accountId}/${symbol}/orders/${orderId}`;
+        const headers = this.buildHeaders();
+        const response = await axios.delete(url, {headers});
+        return <MbCancelOrderResponse> response.data;
     }
 
     public async getOrders(): Promise<any> {
@@ -114,4 +118,8 @@ export type MbPlaceOrderPayload = {
 
 export type MbPlaceOrderResponse = {
     orderId: string;
+}
+
+export type MbCancelOrderResponse = {
+    status: string
 }
