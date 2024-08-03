@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 export class Trading {
     private bearerToken: string;
@@ -86,8 +86,17 @@ export class Trading {
         return <MbCancelAllOrdersResponse> response.data;
     }
 
-    public async listAllOrders(): Promise<any> {
-
+    /**
+     * List orders from all markets (most recent first)
+     * @param accountId Account identifier. Obtained from List Accounts
+     * @param params The query params to filter the request (Not Required)
+     * @returns 
+     */
+    public async listAllOrders(accountId: string, params?: {has_executions?: boolean, symbol?: string, status?: string, size?: number}): Promise<MbCompletedOrder[]> {
+        const url: string = `${this.baseUrl}/${accountId}/orders`;
+        const headers = this.buildHeaders();
+        const response: AxiosResponse = await axios.get(url, {headers});
+        return <MbCompletedOrder[]> response.data.items;
     }
 
     private buildHeaders(): {'Content-Type': string, 'Authorization': string} {
@@ -155,4 +164,19 @@ export type MbCancelAllOrdersResponse = {
     order_type: string;
     side: string;
     status: string;
+}
+
+export type MbCompletedOrder = { 
+    created_at: number,
+    filledQty: number,
+    id: string,
+    instrument: string,
+    limitPrice: number,
+    qty: number,
+    side: string,
+    status: string,
+    stopPrice: number,
+    triggerOrderId: string,
+    type: string,
+    updated_at: number
 }
