@@ -1,4 +1,4 @@
 export type ClientConfiguration = {
-    apiTokenId: string;
-    apiTokenSecret: string;
+    apiTokenId:string;
+    apiTokenSecret:string;
 }
