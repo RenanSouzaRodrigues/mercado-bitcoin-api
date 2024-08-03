@@ -47,7 +47,14 @@ export class Trading {
         return <MbPlaceOrderResponse> response.data;
     } 
 
-    public async cancelOrder(accountId: string, symbol: string, orderId: string): Promise<MbCancelOrderResponse> {
+    /**
+     * Cancel an existing order. 
+     * @param accountId Account identifier. Obtained from List Accounts
+     * @param symbol Instrument symbol in the form BASE-QUOTE(e.g. BTC-BRL)
+     * @param orderId Unique order identifier
+     * @param params The query params to filter the request (Not Required)
+     */
+    public async cancelOrder(accountId: string, symbol: string, orderId: string, params?: {async?: boolean}): Promise<MbCancelOrderResponse> {
         const url = `${this.baseUrl}/${accountId}/${symbol}/orders/${orderId}`;
         const headers = this.buildHeaders();
         const response = await axios.delete(url, {headers});
