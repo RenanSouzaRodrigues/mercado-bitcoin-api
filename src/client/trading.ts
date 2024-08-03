@@ -61,12 +61,29 @@ export class Trading {
         return <MbCancelOrderResponse> response.data;
     }
 
-    public async getOrders(): Promise<any> {
-        
+    /**
+     * Get unique order by identifier
+     * @param accountId Account identifier. Obtained from List Accounts
+     * @param symbol Instrument symbol in the form BASE-QUOTE(e.g. BTC-BRL)
+     * @param orderId Unique order identifier
+     */
+    public async getOrders(accountId: string, symbol: string, orderId: string): Promise<MbTradingOrder> {
+        const url = `${this.baseUrl}/${accountId}/${symbol}/orders/${orderId}`;
+        const headers = this.buildHeaders();
+        const response = await axios.get(url, {headers});
+        return <MbTradingOrder> response.data;
     }
 
-    public async cancelAllOpenOrders(): Promise<any> {
-
+    /**
+     * Cancel all open orders for an account.
+     * @param accountId Account identifier. Obtained from List Accounts
+     * @param params The query params to filter the request (Not Required)
+     */
+    public async cancelAllOpenOrders(accountId: string, params?: {has_executions?: boolean, symbol?: string}): Promise<MbCancelAllOrdersResponse> {
+        const url: string = `${this.baseUrl}/${accountId}/cancel_all_open_orders`
+        const headers = this.buildHeaders();
+        const response = await axios.delete(url, {headers, params});
+        return <MbCancelAllOrdersResponse> response.data;
     }
 
     public async listAllOrders(): Promise<any> {
@@ -129,4 +146,13 @@ export type MbPlaceOrderResponse = {
 
 export type MbCancelOrderResponse = {
     status: string
+}
+
+export type MbCancelAllOrdersResponse = {
+    crypto: string;
+    fiat: string;
+    order_id: string;
+    order_type: string;
+    side: string;
+    status: string;
 }
