@@ -10,7 +10,7 @@ export class Wallet {
      * @param params The query params to filter the request (Not Required)
      */
     public async listDeposits(accountId:string, symbol:string, params?:{limit?:number, page?:number, from?:number, to?:number}):Promise<MbWalletDeposit[]> {
-        const url:string = `${this.baseUrl}/account/${accountId}/wallet/${symbol}/deposits`;
+        const url:string = `${this.baseUrl}/${accountId}/wallet/${symbol}/deposits`;
         const headers:{'Content-Type':string, 'Authorization':string} = this.buildHeaders();
         const response:AxiosResponse = await axios.get(url, {headers, params});
         return <MbWalletDeposit[]> response.data;
@@ -23,7 +23,7 @@ export class Wallet {
      * @param params The query params to filter the request (Not Required)
      */
     public async getDepositAddress(accountId:string, symbol:string, params?:{network?:string}):Promise<MbWalletDepositAddressResponse> {
-        const url:string = `${this.baseUrl}/account/${accountId}/wallet/${symbol}/deposits/addresses`
+        const url:string = `${this.baseUrl}/${accountId}/wallet/${symbol}/deposits/addresses`
         const headers:{'Content-Type':string, 'Authorization':string} = this.buildHeaders();
         const response:AxiosResponse = await axios.get(url, {headers, params});
         return <MbWalletDepositAddressResponse> response.data;
@@ -36,7 +36,7 @@ export class Wallet {
      * @param params The query params to filter the request (Not Required)
      */
     public async listFiatDeposits(accountId:string, symbol:string, params?:{limit?:number, page?:number, from?:number, to?:number}):Promise<MbWalletFiatDeposit> {
-        const url:string = `${this.baseUrl}/account/${accountId}/wallet/fiat/${symbol}/deposits`
+        const url:string = `${this.baseUrl}/${accountId}/wallet/fiat/${symbol}/deposits`
         const headers:{'Content-Type':string, 'Authorization':string} = this.buildHeaders();
         const response:AxiosResponse = await axios.get(url, {headers, params});
         return <MbWalletFiatDeposit> response.data;
@@ -56,11 +56,18 @@ export class Wallet {
      * @param payload The payload to send
      * @returns 
      */
-    public async withdrawCoin(accountId:string, symbol:string, payload: MbWalletWithdrawCoinRequest):Promise<MbWalletWithdrawCoinResponse> {
-        const url:string = `${this.baseUrl}/account/${accountId}/wallet/fiat/${symbol}/deposits`
+    public async withdrawCoin(accountId:string, symbol:string, payload: MbWalletWithdrawCoinRequest):Promise<MbWalletWithdrawCoin> {
+        const url:string = `${this.baseUrl}/${accountId}/wallet/${symbol}/withdraw`
         const headers:{'Content-Type':string, 'Authorization':string} = this.buildHeaders();
         const response:AxiosResponse = await axios.post(url, payload, {headers});
-        return <MbWalletWithdrawCoinResponse> response.data;
+        return <MbWalletWithdrawCoin> response.data;
+    }
+
+    public async listWthdrawCoin(accountId:string, symbol:string, params?:{page?:number, page_size?:number, from?:number}):Promise<MbWalletWithdrawCoin[]> {
+        const url:string = `${this.baseUrl}/${accountId}/wallet/${symbol}/withdraw`
+        const headers:{'Content-Type':string, 'Authorization':string} = this.buildHeaders();
+        const response:AxiosResponse = await axios.get(url, {headers, params});
+        return <MbWalletWithdrawCoin[]> response.data;
     }
 
     private buildHeaders():{'Content-Type':string, "Authorization":string} {
@@ -134,7 +141,7 @@ export type MbWalletWithdrawCoinRequest = {
     tx_fee:number;
 }
 
-export type MbWalletWithdrawCoinResponse = {
+export type MbWalletWithdrawCoin = {
     account:number;
     address:string;
     coin:string;
@@ -150,3 +157,4 @@ export type MbWalletWithdrawCoinResponse = {
     tx:number;
     updated_at:number;
 }
+

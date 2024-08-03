@@ -1,13 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 
 export class Account { 
-    private bearerToken:string;
-    private baseUrl:string;
-
-    constructor(bearerToken:string, url:string) {
-        this.bearerToken = `Bearer ${bearerToken}`;
-        this.baseUrl = url + "/accounts";
-    }
+    constructor(private bearerToken:string, private baseUrl:string) { }
 
     /**
      * Get a list of accounts owned by the user. Usually, MercadoBitcoin works with only one default account.
