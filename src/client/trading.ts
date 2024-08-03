@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 export class Trading {
     private bearerToken: string;
@@ -35,6 +35,7 @@ export class Trading {
 
     /**
      * Place a new order.
+     * Has a rate limit of 3 requests per second
      * @param accountId Account identifier. Obtained from List Accounts
      * @param symbol Instrument symbol in the form BASE-QUOTE(e.g. BTC-BRL)
      * @param payload The request payload
@@ -46,20 +47,56 @@ export class Trading {
         return <MbPlaceOrderResponse> response.data;
     } 
 
-    public async cancelOrder(): Promise<any> {
-
+    /**
+     * Cancel an existing order. 
+     * @param accountId Account identifier. Obtained from List Accounts
+     * @param symbol Instrument symbol in the form BASE-QUOTE(e.g. BTC-BRL)
+     * @param orderId Unique order identifier
+     * @param params The query params to filter the request (Not Required)
+     */
+    public async cancelOrder(accountId: string, symbol: string, orderId: string, params?: {async?: boolean}): Promise<MbCancelOrderResponse> {
+        const url = `${this.baseUrl}/${accountId}/${symbol}/orders/${orderId}`;
+        const headers = this.buildHeaders();
+        const response = await axios.delete(url, {headers});
+        return <MbCancelOrderResponse> response.data;
     }
 
-    public async getOrders(): Promise<any> {
-        
+    /**
+     * Get unique order by identifier
+     * @param accountId Account identifier. Obtained from List Accounts
+     * @param symbol Instrument symbol in the form BASE-QUOTE(e.g. BTC-BRL)
+     * @param orderId Unique order identifier
+     */
+    public async getOrders(accountId: string, symbol: string, orderId: string): Promise<MbTradingOrder> {
+        const url = `${this.baseUrl}/${accountId}/${symbol}/orders/${orderId}`;
+        const headers = this.buildHeaders();
+        const response = await axios.get(url, {headers});
+        return <MbTradingOrder> response.data;
     }
 
-    public async cancelAllOpenOrders(): Promise<any> {
-
+    /**
+     * Cancel all open orders for an account.
+     * @param accountId Account identifier. Obtained from List Accounts
+     * @param params The query params to filter the request (Not Required)
+     */
+    public async cancelAllOpenOrders(accountId: string, params?: {has_executions?: boolean, symbol?: string}): Promise<MbCancelAllOrdersResponse> {
+        const url: string = `${this.baseUrl}/${accountId}/cancel_all_open_orders`
+        const headers = this.buildHeaders();
+        const response = await axios.delete(url, {headers, params});
+        return <MbCancelAllOrdersResponse> response.data;
     }
 
-    public async listAllOrders(): Promise<any> {
-
+    /**
+     * List orders from all markets (most recent first)
+     * @param accountId Account identifier. Obtained from List Accounts
+     * @param params The query params to filter the request (Not Required)
+     * @returns 
+     */
+    public async listAllOrders(accountId: string, params?: {has_executions?: boolean, symbol?: string, status?: string, size?: number}): Promise<MbCompletedOrder[]> {
+        const url: string = `${this.baseUrl}/${accountId}/orders`;
+        const headers = this.buildHeaders();
+        const response: AxiosResponse = await axios.get(url, {headers});
+        return <MbCompletedOrder[]> response.data.items;
     }
 
     private buildHeaders(): {'Content-Type': string, 'Authorization': string} {
@@ -114,4 +151,32 @@ export type MbPlaceOrderPayload = {
 
 export type MbPlaceOrderResponse = {
     orderId: string;
+}
+
+export type MbCancelOrderResponse = {
+    status: string
+}
+
+export type MbCancelAllOrdersResponse = {
+    crypto: string;
+    fiat: string;
+    order_id: string;
+    order_type: string;
+    side: string;
+    status: string;
+}
+
+export type MbCompletedOrder = { 
+    created_at: number,
+    filledQty: number,
+    id: string,
+    instrument: string,
+    limitPrice: number,
+    qty: number,
+    side: string,
+    status: string,
+    stopPrice: number,
+    triggerOrderId: string,
+    type: string,
+    updated_at: number
 }
