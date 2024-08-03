@@ -21,8 +21,8 @@ export class MercadoBitcoinApi {
     }
 
     public async authenticate():Promise<void> {
-        const url: string = `${this.baseUrl}/authorize`;
-        const body: {login:string, password:string} = {login: this.clientConfig.apiTokenId, password: this.clientConfig.apiTokenSecret};
+        const url:string = `${this.baseUrl}/authorize`;
+        const body:{login:string, password:string} = {login: this.clientConfig.apiTokenId, password: this.clientConfig.apiTokenSecret};
         const response:AxiosResponse = await axios.post(url, body);
         this.bearerToken = response.data.access_token;
         this.buildReferences()        
