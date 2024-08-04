@@ -30,8 +30,8 @@ export class MercadoBitcoinApi {
 
     private buildReferences():void {
         this.publicData = new PublicData(this.baseUrl);
-        this.account = new Account(this.bearerToken, this.baseUrl);
-        this.trading = new Trading(this.bearerToken, this.baseUrl);
-        this.wallet = new Wallet(this.bearerToken, this.baseUrl);
+        this.account = new Account("Bearer " + this.bearerToken, this.baseUrl + "/accounts");
+        this.trading = new Trading("Bearer " + this.bearerToken, this.baseUrl + "/accounts");
+        this.wallet = new Wallet("Bearer " + this.bearerToken, this.baseUrl + "/accounts");
     }
 }
