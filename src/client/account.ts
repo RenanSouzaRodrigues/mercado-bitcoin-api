@@ -59,10 +59,7 @@ export class Account {
     }
 
     private buildHeaders():{'Content-Type':string, 'Authorization':string} {
-        return {
-            "Content-Type": "application/json",
-            "Authorization": this.bearerToken,
-        }
+        return { "Content-Type": "application/json", "Authorization": this.bearerToken }
     }
 }
 
