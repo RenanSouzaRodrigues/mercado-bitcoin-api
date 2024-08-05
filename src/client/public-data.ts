@@ -34,7 +34,7 @@ export class PublicData {
      * @param symbol Instrument symbol in the form BASE-QUOTE(e.g. BTC-BRL)
      * @param params The query params to filter the request (Not Required)
      */
-    public async listTrades(symbol:string, params?:{tid:number, since:number, from:number, to:number, limit:number}):Promise<MbOrder[]> {
+    public async listTrades(symbol:string, params?:{tid?:number, since?:number, from?:number, to?:number, limit?:number}):Promise<MbOrder[]> {
         const url:string = `${this.baseUrl}/${symbol}/trades`;
         const headers = {"Content-Type": "application/json"};
         const response:AxiosResponse = await axios.get(url, {headers, params});
@@ -46,7 +46,7 @@ export class PublicData {
      * Has a request limit of 1 request per second
      * @param params The query params to filter the request (Not Required)
      */
-    public async listCandles(params?:{symbol:string, resolution:string, to:number, from:number, countback:number}):Promise<MbCandle> {
+    public async listCandles(params:{symbol:string, resolution?:string, to?:number, from?:number, countback?:number}):Promise<MbCandle> {
         const url:string = `${this.baseUrl}/candles`;
         const headers = {"Content-Type": "application/json"};
         const response:AxiosResponse = await axios.get(url, {headers, params});

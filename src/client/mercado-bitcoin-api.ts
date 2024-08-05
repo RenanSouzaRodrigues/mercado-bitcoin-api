@@ -18,9 +18,11 @@ export class MercadoBitcoinApi {
     constructor(clientConfig: ClientConfiguration) {
         this.clientConfig = clientConfig;
         this.baseUrl = "https://api.mercadobitcoin.net/api/v4";
+        this.publicData = new PublicData(this.baseUrl);
+        this.authenticate
     }
 
-    public async authenticate():Promise<void> {
+    private async authenticate():Promise<void> {
         const url:string = `${this.baseUrl}/authorize`;
         const body:{login:string, password:string} = {login: this.clientConfig.apiTokenId, password: this.clientConfig.apiTokenSecret};
         const response:AxiosResponse = await axios.post(url, body);
@@ -29,7 +31,6 @@ export class MercadoBitcoinApi {
     }
 
     private buildReferences():void {
-        this.publicData = new PublicData(this.baseUrl);
         this.account = new Account("Bearer " + this.bearerToken, this.baseUrl + "/accounts");
         this.trading = new Trading("Bearer " + this.bearerToken, this.baseUrl + "/accounts");
         this.wallet = new Wallet("Bearer " + this.bearerToken, this.baseUrl + "/accounts");
