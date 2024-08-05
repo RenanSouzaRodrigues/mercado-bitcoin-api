@@ -12,22 +12,26 @@ export class MercadoBitcoinApi {
     public wallet!:Wallet;
 
     private clientConfig:ClientConfiguration;
-    private baseUrl!:string;
+    private readonly baseUrl!:string;
     private bearerToken!:string;
     
     constructor(clientConfig: ClientConfiguration) {
         this.clientConfig = clientConfig;
         this.baseUrl = "https://api.mercadobitcoin.net/api/v4";
         this.publicData = new PublicData(this.baseUrl);
-        this.authenticate
     }
 
-    private async authenticate():Promise<void> {
-        const url:string = `${this.baseUrl}/authorize`;
-        const body:{login:string, password:string} = {login: this.clientConfig.apiTokenId, password: this.clientConfig.apiTokenSecret};
-        const response:AxiosResponse = await axios.post(url, body);
-        this.bearerToken = response.data.access_token;
-        this.buildReferences()        
+    public async authenticate():Promise<void> {
+        try {
+            const url:string = `${this.baseUrl}/authorize`;
+            const body:{login:string, password:string} = {login: this.clientConfig.apiTokenId, password: this.clientConfig.apiTokenSecret};
+            const response:AxiosResponse = await axios.post(url, body);
+            const authenticatedSession:MbAuthenticatedSession = <MbAuthenticatedSession> response.data;
+            this.bearerToken = authenticatedSession.access_token;
+            this.buildReferences()
+        } catch (error) {
+            throw new Error("Provided public key and/or secret key are invalid. Authentication was not completed")
+        }
     }
 
     private buildReferences():void {
@@ -35,4 +39,9 @@ export class MercadoBitcoinApi {
         this.trading = new Trading("Bearer " + this.bearerToken, this.baseUrl + "/accounts");
         this.wallet = new Wallet("Bearer " + this.bearerToken, this.baseUrl + "/accounts");
     }
+}
+
+type MbAuthenticatedSession = {
+    access_token:string;
+    expiration:number;
 }
