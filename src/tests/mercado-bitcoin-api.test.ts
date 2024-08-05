@@ -80,4 +80,8 @@ describe("public api", () => {
         const response:MbOrder[] = await client.publicData.listTrades("BTC-BRL");
         expect(response.length).toBeGreaterThan(0);
     });
+});
+
+describe("Account API", () => {
+    
 })
