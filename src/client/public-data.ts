@@ -46,11 +46,11 @@ export class PublicData {
      * Has a request limit of 1 request per second
      * @param params The query params to filter the request (Not Required)
      */
-    public async listCandles(params:{symbol:string, resolution?:string, to?:number, from?:number, countback?:number}):Promise<MbCandle> {
+    public async listCandles(params:{symbol:string, resolution:string, to:number, from:number, countback?:number}):Promise<MbCandle> {
         const url:string = `${this.baseUrl}/candles`;
         const headers = {"Content-Type": "application/json"};
         const response:AxiosResponse = await axios.get(url, {headers, params});
-        return <MbCandle> response.data; 
+        return <MbCandle> response.data;
     }
 
     /**
@@ -78,11 +78,11 @@ export class PublicData {
      * Has a request limit of 1 request per second
      * @param params The required param to send to the api
      */
-    public async listTickers(params:{symbols: string}):Promise<MbCandle> {
+    public async listTickers(params:{symbols: string}):Promise<MbTicker[]> {
         const url:string = `${this.baseUrl}/tickers`;
         const headers = {"Content-Type": "application/json"};
         const response:AxiosResponse = await axios.get(url, {headers, params});
-        return <MbCandle> response.data; 
+        return <MbTicker[]> response.data; 
     }
 
     /**
@@ -131,10 +131,22 @@ export type MbCandle = {
     v:number[];
 }
 
+export type MbTicker = {
+    buy:number;
+    date:number;
+    high:number;
+    last:number;
+    low:number;
+    open:number;
+    pair:string;
+    sell:number;
+    vol:number;
+}
+
 export type MbSymbol = {
     base_currency:string[];
     currency:string[];
-    deposit_minimum:number[];
+    deposit_minimum?:number[];
     description:string[];
     exchange_listed:boolean[];
     exchange_traded:boolean[];
@@ -145,7 +157,7 @@ export type MbSymbol = {
     timezone:string[];
     type:string[];
     withdraw_minimum:number[];
-    withdrawal_fee:number[];
+    withdrawal_fee?:number[];
 }
 
 export type MbNetworkFromAsset = {
