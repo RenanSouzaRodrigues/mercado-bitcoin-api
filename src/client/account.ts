@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios, {AxiosError, AxiosResponse} from "axios";
 
 export class Account { 
     constructor(private bearerToken:string, private baseUrl:string) { }
@@ -27,12 +27,12 @@ export class Account {
      * Get tier tax
      * @param accountId Account identifier. Obtained from List Accounts
      */
-    public async getTier(accountId:string):Promise<MbAccountTier[]> {
-        const url:string = `${this.baseUrl}/${accountId}/tier`;
-        const headers:{'Content-Type':string, 'Authorization':string} = this.buildHeaders();
-        const response:AxiosResponse = await axios.get(url, {headers});
-        return <MbAccountTier[]> response.data;
-    }
+    // public async getTier(accountId:string):Promise<MbAccountTier[]> {
+    //     const url:string = `${this.baseUrl}/${accountId}/tier`;
+    //     const headers:{'Content-Type':string, 'Authorization':string} = this.buildHeaders();
+    //     const response:AxiosResponse = await axios.get(url, {headers});
+    //     return <MbAccountTier[]> response.data;
+    // }
 
     /**
      * Get your trading fees for each symbol

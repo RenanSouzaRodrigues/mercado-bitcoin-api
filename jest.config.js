@@ -3,11 +3,6 @@ module.exports = {
     roots: ["<rootDir>"],
     testEnvironment: "node",
     setupFiles: [],
-    globals: {
-      "ts-jest": {
-        isolatedModules: true,
-      },
-    },
     collectCoverage: true,
     transform: {
       ".+\\.ts$": "ts-jest",
