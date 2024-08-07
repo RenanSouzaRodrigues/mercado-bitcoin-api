@@ -2,13 +2,16 @@ import { ClientConfiguration } from "../client/client-configuration";
 import { MercadoBitcoinApi } from "../client/mercado-bitcoin-api";
 import { MbCandle, MbFeeFromAsset, MbNetworkFromAsset, MbOrder, MbOrderBook, MbSymbol, MbTicker } from "../client/public-data";
 import 'dotenv/config'
+import {MbAccount, MbAccountBalance, MbAccountTier, MbAccountTradingFee} from "../client/account";
 
-const clientConfig:ClientConfiguration = {
-    apiTokenId: <string>process.env.PUBLIC_KEY,
-    apiTokenSecret: <string>process.env.SECRET_KEY
-}
+const clientConfig:ClientConfiguration = {apiTokenId: <string>process.env.PUBLIC_KEY, apiTokenSecret: <string>process.env.SECRET_KEY}
 const client:MercadoBitcoinApi = new MercadoBitcoinApi(clientConfig);
-const auxData:{accountId?:string} = {};
+let accountId:string = "";
+const getAccountId = async ():Promise<void> => {
+    await client.authenticate();
+    const response:MbAccount[] = await client.account.listAccounts();
+    accountId = response[0].id;
+}
 
 describe("public api", ():void => {
     it("must get fees from assets", async ():Promise<void> => {
@@ -94,4 +97,24 @@ describe("mercado bitcoin authentication process", ():void => {
     });
 });
 
-describe("account tests", ():void => {})
+describe("account tests", ():void => {
+    it("must list accounts", async ():Promise<void> => {
+        await client.authenticate();
+        const response:MbAccount[] = await client.account.listAccounts();
+        expect(response.length).toBeGreaterThan(0);
+        expect(response[0].id).not.toBeNull();
+        accountId = response[0].id;
+    });
+
+    it("must return account balances", async ():Promise<void> => {
+        if (!accountId) await getAccountId();
+        const response:MbAccountBalance[] = await client.account.listBalances(accountId);
+        expect(response.length).toBeGreaterThan(0);
+    });
+
+    it("must return trading fees", async ():Promise<void> => {
+        if (!accountId) await getAccountId();
+        const response:MbAccountTradingFee = await client.account.getTradingFees(accountId, "BTC-BRL");
+        console.log(response);
+    });
+})
