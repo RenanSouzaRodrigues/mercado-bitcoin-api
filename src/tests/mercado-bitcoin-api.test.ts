@@ -2,7 +2,7 @@ import { ClientConfiguration } from "../client/client-configuration";
 import { MercadoBitcoinApi } from "../client/mercado-bitcoin-api";
 import { MbCandle, MbFeeFromAsset, MbNetworkFromAsset, MbOrder, MbOrderBook, MbSymbol, MbTicker } from "../client/public-data";
 import 'dotenv/config'
-import {MbAccount, MbAccountBalance, MbAccountTier, MbAccountTradingFee} from "../client/account";
+import {MbAccount, MbAccountBalance, MbAccountTradingFee} from "../client/account";
 
 const clientConfig:ClientConfiguration = {apiTokenId: <string>process.env.PUBLIC_KEY, apiTokenSecret: <string>process.env.SECRET_KEY}
 const client:MercadoBitcoinApi = new MercadoBitcoinApi(clientConfig);
@@ -114,7 +114,21 @@ describe("account tests", ():void => {
 
     it("must return trading fees", async ():Promise<void> => {
         if (!accountId) await getAccountId();
-        const response:MbAccountTradingFee = await client.account.getTradingFees(accountId, "BTC-BRL");
+        const response:MbAccountTradingFee = await client.account.getTradingFees(accountId, "BTC");
         console.log(response);
     });
+
+    it("must", async ():Promise<void> => {
+        if (!accountId) await getAccountId();
+        const response = await client.account.listPositions(accountId);
+        expect(response).not.toBeNull()
+    });
+});
+
+describe("trading tests", ():void => {
+    it("", async ():Promise<void> => {
+        if (!accountId) await getAccountId();
+        const response = await client.trading.listAllOrders(accountId);
+        console.log(response);
+    })
 })
