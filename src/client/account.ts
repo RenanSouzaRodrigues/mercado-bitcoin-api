@@ -51,11 +51,11 @@ export class Account {
      * @param accountId Account identifier. Obtained from List Accounts
      * @param params The query params you can send to filter the request (Not Required)
      */
-    public async listPositions(accountId:string, params?:{symbol?:string}):Promise<MbAccountPosition> {
+    public async listPositions(accountId:string, params?:{symbol?:string}):Promise<MbAccountPosition[]> {
         const url:string = `${this.baseUrl}/${accountId}/positions`;
         const headers:{'Content-Type':string, 'Authorization':string} = this.buildHeaders();
         const response:AxiosResponse = await axios.get(url, {headers, params});
-        return <MbAccountPosition> response.data;
+        return <MbAccountPosition[]> response.data;
     }
 
     private buildHeaders():{'Content-Type':string, 'Authorization':string} {
